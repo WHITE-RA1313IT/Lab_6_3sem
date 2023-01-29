@@ -1,10 +1,13 @@
 #include <iostream>
+#include "IError .h"
 #define _USE_MATH_DEFINES
 #include <Math.h>
 #include <vector>
+#include <string>
 using namespace std;
 
 class Complex {
+    string log;
     double radius(double const& x, double const& y) {
         return sqrt(pow(x, 2) + pow(y, 2));
     }
@@ -34,6 +37,14 @@ class Complex {
     }
 public:
     double first, second, rad, arg;
+
+    string get_log() {
+        return log;
+    }
+    void set_log(string const& other_log) {
+        log = other_log;
+    }
+
     Complex() {
         first = 0;
         second = 0;
@@ -62,7 +73,7 @@ public:
 
     void div(Complex const& obj1, Complex const& obj2) {
         if (obj2.first == 0 && obj2.second == 0) {
-            throw "Division by zero.";
+            throw DivisionByZero();
         }
         else {
             first = (obj1.first * obj2.first + obj1.second * obj2.second) / (pow(obj2.first, 2) + pow(obj2.second, 2));
@@ -70,11 +81,16 @@ public:
         }
     }
 
-    double exp(int const& degree) {
-        return pow(radius(first, second), degree) * (cos(degree * argument(first, second)) + sin(degree * argument(first, second)));
+    void exp(int const& degree) {
+        log += "EXPONENTIATION\n";
+
+        cout << pow(radius(first, second), degree) * cos(degree * argument(first, second)) << "+";
+        cout << pow(radius(first, second), degree) * sin(degree * argument(first, second)) << "i\n";
     }
 
     void complex_sqrt(int const& degree) {
+        log += "SQRT\n";
+
         vector <Complex> roots;
         for (int i = 1; i <= degree; i++) {
             Complex temp_obj;
@@ -90,29 +106,100 @@ public:
         cout << endl;
     }
 
-    void quadratic_equation(string const& equa) {
-        string str = equa;
-        for (int i = 0; i < str.length(); i++) {
-            if (str[i] == ' ') {
-                for (int j = i; j < str.length(); j++) {
-                    str[j] == str[j + 1];
-                }
-            }
-        }
-        for (int i = 0; i < str.length(); i++) {
-            
+    void quadratic_equation(int const& a, int const& b, int const& c) {
+        log += "COMPLEX ROOTS OF THE QUADRATIC EQUATION\n";
+
+        if (pow(b, 2) - 4 * a * c < 0) {
+            cout << -b / (2 * a) << "-" << sqrt(abs(pow(b, 2) - 4 * a * c)) / (2 * a) << "i; ";
+            cout << -b / (2 * a) << "+" << sqrt(abs(pow(b, 2) - 4 * a * c)) / (2 * a) << "i\n";
         }
     }
 
     void trigonometric() {
-        cout << radius(first, second) << "*(cos(" << argument(first, second) << ") + i*sin(" << argument(first, second) << "))" << endl;
+        log += "TRIGONOMETRIC FORM\n";
+
+        cout << radius(first, second) << "*(cos(" << argument(first, second) << ") + i*sin(" << argument(first, second) << "))\n";
     }
     void indicative() {
-        cout << radius(first, second) << "*e^(" << argument(first, second) << "i)" << endl;
+        log += "INDICATIVE FORM\n";
+
+        cout << radius(first, second) << "*e^(" << argument(first, second) << "i)\n";
     }
 
-    friend ostream& operator<<(ostream& os, Complex const& obj);
+    Complex operator+(Complex const& obj) {
+        log += "ADD\n";
+
+        Complex temp;
+        temp.add(Complex(first, second), obj);
+        return temp;
+    }
+
+    Complex operator-(Complex const& obj) {
+        log += "SUB\n";
+
+        Complex temp;
+        temp.sub(Complex(first, second), obj);
+        temp.set_log(log);
+        return temp;
+    }
+
+    Complex operator*(Complex const& obj) {
+        log += "MULT\n";
+
+        Complex temp;
+        temp.mult(Complex(first, second), obj);
+        temp.set_log(log);
+        return temp;
+    }
+
+    Complex operator/(Complex const& obj) {
+        log += "DIV\n";
+
+        Complex temp;
+        temp.div(Complex(first, second), obj);
+        temp.set_log(log);
+        return temp;
+    }
+
+    bool operator==(const Complex& obj) {
+        log += "EQUIVAL\n";
+
+        if (first == obj.first && second == obj.second) {
+            return true;
+        }
+        else return false;
+    }
+
+    bool operator!=(const Complex& obj) {
+        log += "NONEQUIVAL\n";
+
+        if (first != obj.first || second != obj.second) {
+            return true;
+        }
+        else return false;
+    }
 };
+
+int getInt() {
+    string input;
+    getline(cin, input);
+    for (int i = 0; i < input.length(); i++) {
+        if (!isdigit(input[i]) || input[i] == ' ') {
+            throw IncorrectInput();
+            break;
+        }
+    }
+    if (input == "") throw CriticalIncorrectInput();
+    return stoi(input);
+}
+
+istream& operator>>(istream& is, Complex& obj) {
+    cout << "Enter the valid part: ";
+    obj.first = getInt();
+    cout << "Enter the imaginary part: ";
+    obj.second = getInt();
+    return is;
+}
 
 ostream& operator<<(ostream& os, Complex const& obj) {
     if (obj.second > 0) os << obj.first << "+" << obj.second << "i";
@@ -120,19 +207,196 @@ ostream& operator<<(ostream& os, Complex const& obj) {
     return os;
 }
 
+enum MENU { ADD = 1, SUB, MULT, DIV, TRIGONOMETRIC_FORM, INDICATIVE_FORM, EXPONENTIATION, SQRT, QUADRATIC_EQUATION, LOG, EXIT };
+
+void ComplexMenu(string& logger) {
+    cout << "Select an operation:\n";
+    cout << "1) Addition;\n";
+    cout << "2) Subtraction;\n";
+    cout << "3) Multiplication;\n";
+    cout << "4) Division;\n";
+    cout << "5) Trigonometric form;\n";
+    cout << "6) Indicative form;\n";
+    cout << "7) Exponentiation;\n";
+    cout << "8) Finding the root;\n";
+    cout << "9) A quadratic equation with complex roots;\n";
+    cout << "10) Check log;\n";
+    cout << "11) Exit to main menu.\n";
+    cout << "Your choice: ";
+
+    try {
+        int choice;
+        choice = getInt();
+        if (choice < 1 || choice > 11) throw IncorrectInput();
+        cout << endl;
+
+        Complex a, b;
+        switch (choice) {
+        case ADD:
+            cout << "Enter the first choiceber:\n";
+            cin >> a;
+            cout << "Enter the second choiceber:\n";
+            cin >> b;
+            cout << "Result: " << a + b << "\n\n";
+
+            logger += a.get_log();
+            ComplexMenu(logger);
+            break;
+
+        case SUB:
+            cout << "Enter the first choiceber:\n";
+            cin >> a;
+            cout << "Enter the second choiceber:\n";
+            cin >> b;
+            cout << "Result: " << a - b << "\n\n";
+
+            logger += a.get_log();
+            ComplexMenu(logger);
+            break;
+
+        case MULT:
+            cout << "Enter the first choiceber:\n";
+            cin >> a;
+            cout << "Enter the second choiceber:\n";
+            cin >> b;
+            cout << "Result: " << a * b << "\n\n";
+
+            logger += a.get_log();
+            ComplexMenu(logger);
+            break;
+
+        case DIV:
+            cout << "Enter the first choiceber:\n";
+            cin >> a;
+            cout << "Enter the second choiceber:\n";
+            cin >> b;
+            cout << "Result: " << a / b << "\n\n";
+
+            logger += a.get_log();
+            ComplexMenu(logger);
+            break;
+
+        case TRIGONOMETRIC_FORM:
+            cout << "Enter the choiceber:\n";
+            cin >> a;
+            cout << "Result: ";
+            a.trigonometric();
+            cout << endl;
+
+            logger += a.get_log();
+            ComplexMenu(logger);
+            break;
+
+        case INDICATIVE_FORM:
+            cout << "Enter the choiceber:\n";
+            cin >> a;
+            cout << "Result: ";
+            a.indicative();
+            cout << endl;
+
+            logger += a.get_log();
+            ComplexMenu(logger);
+            break;
+
+        case EXPONENTIATION:
+            cout << "Enter the choiceber:\n";
+            cin >> a;
+            cout << "Enter the degree: ";
+            int degree;
+            degree = getInt();
+            cout << "Result: ";
+            a.exp(degree);
+            cout << endl;
+
+            logger += a.get_log();
+            ComplexMenu(logger);
+            break;
+
+        case SQRT:
+            cout << "Enter the choiceber:\n";
+            cin >> a;
+            cout << "Enter the root degree: ";
+            int root_degree;
+            root_degree = getInt();
+            cout << "Result: ";
+            a.complex_sqrt(root_degree);
+            cout << endl;
+
+            logger += a.get_log();
+            ComplexMenu(logger);
+            break;
+
+        case QUADRATIC_EQUATION:
+            cout << "Enter the coefficients of the equation (ax^2+bx+c=0):\n";
+            int a_coef, b_coef, c_coef;
+            cout << "a: ";
+            a_coef = getInt();
+            cout << "b: ";
+            b_coef = getInt();
+            cout << "c: ";
+            c_coef = getInt();
+            cout << "Result: ";
+            a.quadratic_equation(a_coef, b_coef, c_coef);
+            cout << endl;
+
+            logger += a.get_log();
+            ComplexMenu(logger);
+            break;
+
+        case LOG:
+            cout << logger << endl;
+            ComplexMenu(logger);
+            break;
+
+        case EXIT:
+            break;
+        }
+    }
+
+    catch (CriticalIncorrectInput& e) {
+        e.print();
+        ComplexMenu(logger);
+    }
+    catch (IncorrectInput& e) {
+        e.print();
+        ComplexMenu(logger);
+    }
+    catch (DivisionByZero& e) {
+        e.print();
+        ComplexMenu(logger);
+    }
+}
+
 int main()
 {
-    Complex a(1, sqrt(3));
-    Complex b(0, -8);
-    Complex c;
-    c.add(a, b);
-    cout << c << endl;
-    c.sub(a, b);
-    cout << c << endl;
-    c.mult(a, b);
-    cout << c << endl;
-    c.div(a, b);
-    cout << c << endl;
-    cout << a.exp(18) << endl;
-    b.complex_sqrt(2);
+    while (true) {
+        string logger;
+
+        cout << "Select a task:\n";
+        cout << "1) Complex numbers;\n";
+        cout << "2) Funny Game;\n";
+        cout << "3) Exit.\n";
+        cout << "Your choice: ";
+
+        try {
+            int choice;
+            choice = getInt();
+            if (choice < 1 || choice > 3) throw IncorrectInput();
+            cout << endl;
+
+            if (choice == 1) {
+                ComplexMenu(logger);
+            }
+            if (choice == 2) {
+                cout << "VERY FUNNY GAME\n\n";
+            }
+            if (choice == 3) {
+                exit(0);
+            }
+        }
+
+        catch (IncorrectInput& e) {
+            e.print();
+        }
+    }
 }
