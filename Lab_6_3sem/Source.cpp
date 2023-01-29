@@ -161,6 +161,9 @@ public:
         return temp;
     }
 
+    friend istream& operator>>(istream& is, Complex& obj);
+    friend ostream& operator<<(ostream& os, Complex const& obj);
+
     bool operator==(const Complex& obj) {
         log += "EQUIVAL\n";
 
@@ -233,9 +236,9 @@ void ComplexMenu(string& logger) {
         Complex a, b;
         switch (choice) {
         case ADD:
-            cout << "Enter the first choiceber:\n";
+            cout << "Enter the first number:\n";
             cin >> a;
-            cout << "Enter the second choiceber:\n";
+            cout << "Enter the second number:\n";
             cin >> b;
             cout << "Result: " << a + b << "\n\n";
 
@@ -244,9 +247,9 @@ void ComplexMenu(string& logger) {
             break;
 
         case SUB:
-            cout << "Enter the first choiceber:\n";
+            cout << "Enter the first number:\n";
             cin >> a;
-            cout << "Enter the second choiceber:\n";
+            cout << "Enter the second number:\n";
             cin >> b;
             cout << "Result: " << a - b << "\n\n";
 
@@ -255,9 +258,9 @@ void ComplexMenu(string& logger) {
             break;
 
         case MULT:
-            cout << "Enter the first choiceber:\n";
+            cout << "Enter the first number:\n";
             cin >> a;
-            cout << "Enter the second choiceber:\n";
+            cout << "Enter the second number:\n";
             cin >> b;
             cout << "Result: " << a * b << "\n\n";
 
@@ -266,9 +269,9 @@ void ComplexMenu(string& logger) {
             break;
 
         case DIV:
-            cout << "Enter the first choiceber:\n";
+            cout << "Enter the first number:\n";
             cin >> a;
-            cout << "Enter the second choiceber:\n";
+            cout << "Enter the second number:\n";
             cin >> b;
             cout << "Result: " << a / b << "\n\n";
 
@@ -277,7 +280,7 @@ void ComplexMenu(string& logger) {
             break;
 
         case TRIGONOMETRIC_FORM:
-            cout << "Enter the choiceber:\n";
+            cout << "Enter the number:\n";
             cin >> a;
             cout << "Result: ";
             a.trigonometric();
@@ -288,7 +291,7 @@ void ComplexMenu(string& logger) {
             break;
 
         case INDICATIVE_FORM:
-            cout << "Enter the choiceber:\n";
+            cout << "Enter the number:\n";
             cin >> a;
             cout << "Result: ";
             a.indicative();
@@ -299,7 +302,7 @@ void ComplexMenu(string& logger) {
             break;
 
         case EXPONENTIATION:
-            cout << "Enter the choiceber:\n";
+            cout << "Enter the number:\n";
             cin >> a;
             cout << "Enter the degree: ";
             int degree;
@@ -313,7 +316,7 @@ void ComplexMenu(string& logger) {
             break;
 
         case SQRT:
-            cout << "Enter the choiceber:\n";
+            cout << "Enter the number:\n";
             cin >> a;
             cout << "Enter the root degree: ";
             int root_degree;
@@ -381,21 +384,31 @@ int main()
         try {
             int choice;
             choice = getInt();
-            if (choice < 1 || choice > 3) throw IncorrectInput();
-            cout << endl;
-
-            if (choice == 1) {
-                ComplexMenu(logger);
+            if (choice < 1 || choice > 3) {
+                throw IncorrectInput();
+                cout << endl;
             }
-            if (choice == 2) {
-                cout << "VERY FUNNY GAME\n\n";
-            }
-            if (choice == 3) {
-                exit(0);
+            else {
+                cout << endl;
+                if (choice == 1) {
+                    ComplexMenu(logger);
+                }
+                if (choice == 2) {
+                    cout << "VERY FUNNY GAME\n\n";
+                }
+                if (choice == 3) {
+                    exit(0);
+                }
             }
         }
 
+        catch (CriticalIncorrectInput& e) {
+            e.print();
+        }
         catch (IncorrectInput& e) {
+            e.print();
+        }
+        catch (DivisionByZero& e) {
             e.print();
         }
     }
