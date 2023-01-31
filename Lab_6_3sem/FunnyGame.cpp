@@ -47,7 +47,7 @@ bool FunnyGame::isWin(vector<int> const& answers) {
     return false;
 }
 
-void FunnyGameMenu() {
+void FunnyGameMenu(vector<IError*>& err) {
     try {
         cout << char(9475) << char(9476) << "FUNNY GAME" << char(9477) << char(9478) << endl;
         cout << "1) Play;\n";
@@ -85,11 +85,15 @@ void FunnyGameMenu() {
     }
 
     catch (CriticalIncorrectInput& e) {
+        err.push_back(new CriticalIncorrectInput);
         e.print();
-        FunnyGameMenu();
+        cout << endl;
+        FunnyGameMenu(err);
     }
     catch (IncorrectInput& e) {
+        err.push_back(new IncorrectInput);
         e.print();
-        FunnyGameMenu();
+        cout << endl;
+        FunnyGameMenu(err);
     }
 }

@@ -10,4 +10,4 @@ public:
     bool isWin(vector<int> const& answers);
 };
 
-void FunnyGameMenu();
+void FunnyGameMenu(vector<IError*>& err);

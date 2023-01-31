@@ -38,4 +38,4 @@ public:
 };
 
 enum COMPLEX_MENU { ADD = 1, SUB, MULT, DIV, TRIGONOMETRIC_FORM, INDICATIVE_FORM, EXPONENTIATION, SQRT, QUADRATIC_EQUATION, LOG, EXIT };
-void ComplexMenu(string& logger);
+void ComplexMenu(string& logger, vector<IError*>& err);

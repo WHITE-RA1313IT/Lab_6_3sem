@@ -190,7 +190,7 @@ ostream& operator<<(ostream& os, Complex const& obj) {
     return os;
 }
 
-void ComplexMenu(string& logger) {
+void ComplexMenu(string& logger, vector<IError*>& err) {
     cout << "Select an operation:\n";
     cout << "1) Addition;\n";
     cout << "2) Subtraction;\n";
@@ -221,7 +221,7 @@ void ComplexMenu(string& logger) {
             cout << "Result: " << a + b << "\n\n";
 
             logger += a.get_log();
-            ComplexMenu(logger);
+            ComplexMenu(logger, err);
             break;
 
         case SUB:
@@ -232,7 +232,7 @@ void ComplexMenu(string& logger) {
             cout << "Result: " << a - b << "\n\n";
 
             logger += a.get_log();
-            ComplexMenu(logger);
+            ComplexMenu(logger, err);
             break;
 
         case MULT:
@@ -243,7 +243,7 @@ void ComplexMenu(string& logger) {
             cout << "Result: " << a * b << "\n\n";
 
             logger += a.get_log();
-            ComplexMenu(logger);
+            ComplexMenu(logger, err);
             break;
 
         case DIV:
@@ -254,7 +254,7 @@ void ComplexMenu(string& logger) {
             cout << "Result: " << a / b << "\n\n";
 
             logger += a.get_log();
-            ComplexMenu(logger);
+            ComplexMenu(logger, err);
             break;
 
         case TRIGONOMETRIC_FORM:
@@ -265,7 +265,7 @@ void ComplexMenu(string& logger) {
             cout << endl;
 
             logger += a.get_log();
-            ComplexMenu(logger);
+            ComplexMenu(logger, err);
             break;
 
         case INDICATIVE_FORM:
@@ -276,7 +276,7 @@ void ComplexMenu(string& logger) {
             cout << endl;
 
             logger += a.get_log();
-            ComplexMenu(logger);
+            ComplexMenu(logger, err);
             break;
 
         case EXPONENTIATION:
@@ -290,7 +290,7 @@ void ComplexMenu(string& logger) {
             cout << endl;
 
             logger += a.get_log();
-            ComplexMenu(logger);
+            ComplexMenu(logger, err);
             break;
 
         case SQRT:
@@ -304,7 +304,7 @@ void ComplexMenu(string& logger) {
             cout << endl;
 
             logger += a.get_log();
-            ComplexMenu(logger);
+            ComplexMenu(logger, err);
             break;
 
         case QUADRATIC_EQUATION:
@@ -321,12 +321,12 @@ void ComplexMenu(string& logger) {
             cout << endl;
 
             logger += a.get_log();
-            ComplexMenu(logger);
+            ComplexMenu(logger, err);
             break;
 
         case LOG:
             cout << logger << endl;
-            ComplexMenu(logger);
+            ComplexMenu(logger, err);
             break;
 
         case EXIT:
@@ -335,15 +335,21 @@ void ComplexMenu(string& logger) {
     }
 
     catch (CriticalIncorrectInput& e) {
+        err.push_back(new CriticalIncorrectInput);
         e.print();
-        ComplexMenu(logger);
+        cout << endl;
+        ComplexMenu(logger, err);
     }
     catch (IncorrectInput& e) {
+        err.push_back(new IncorrectInput);
         e.print();
-        ComplexMenu(logger);
+        cout << endl;
+        ComplexMenu(logger, err);
     }
     catch (DivisionByZero& e) {
+        err.push_back(new DivisionByZero);
         e.print();
-        ComplexMenu(logger);
+        cout << endl;
+        ComplexMenu(logger, err);
     }
 }
