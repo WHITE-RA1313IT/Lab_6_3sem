@@ -1,9 +1,6 @@
-#include <iostream>
-#include <windows.h>
 #include "IError.h"
 #include "FunnyGame.h"
 #include <random>
-using namespace std;
 
 FunnyGame::FunnyGame(int const& N) {
     game.resize(N);
@@ -105,12 +102,10 @@ void FunnyGameMenu(vector<IError*>& err) {
         err.push_back(new CriticalIncorrectInput);
         e.print();
         cout << endl;
-        FunnyGameMenu(err);
     }
     catch (IncorrectInput& e) {
         err.push_back(new IncorrectInput);
         e.print();
         cout << endl;
-        FunnyGameMenu(err);
     }
 }

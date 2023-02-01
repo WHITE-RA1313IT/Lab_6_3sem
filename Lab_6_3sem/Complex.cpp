@@ -1,11 +1,7 @@
-#include <iostream>
 #include "IError.h"
 #include "Complex.h"
 #define _USE_MATH_DEFINES
 #include <Math.h>
-#include <vector>
-#include <string>
-using namespace std;
 
 double Complex::radius(double const& x, double const& y) {
     return sqrt(pow(x, 2) + pow(y, 2));

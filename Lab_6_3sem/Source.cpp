@@ -2,7 +2,6 @@
 #include "Complex.h"
 #include "FunnyGame.h"
 
-
 void print_error_list(vector<IError*> err) {
     for (auto x : err) {
         (*x).print();
