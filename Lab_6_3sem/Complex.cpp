@@ -187,165 +187,156 @@ ostream& operator<<(ostream& os, Complex const& obj) {
 }
 
 void ComplexMenu(string& logger, vector<IError*>& err) {
-    cout << "Select an operation:\n";
-    cout << "1) Addition;\n";
-    cout << "2) Subtraction;\n";
-    cout << "3) Multiplication;\n";
-    cout << "4) Division;\n";
-    cout << "5) Trigonometric form;\n";
-    cout << "6) Indicative form;\n";
-    cout << "7) Exponentiation;\n";
-    cout << "8) Finding the root;\n";
-    cout << "9) A quadratic equation with complex roots;\n";
-    cout << "10) Check log;\n";
-    cout << "11) Exit to main menu.\n";
-    cout << "Your choice: ";
+    bool running = true;
+    while (running) {
+        try {
+            cout << "Select an operation:\n";
+            cout << "1) Addition;\n";
+            cout << "2) Subtraction;\n";
+            cout << "3) Multiplication;\n";
+            cout << "4) Division;\n";
+            cout << "5) Trigonometric form;\n";
+            cout << "6) Indicative form;\n";
+            cout << "7) Exponentiation;\n";
+            cout << "8) Finding the root;\n";
+            cout << "9) A quadratic equation with complex roots;\n";
+            cout << "10) Check log;\n";
+            cout << "11) Exit to main menu.\n";
+            cout << "Your choice: ";
 
-    try {
-        int choice;
-        choice = getInt();
-        if (choice < 1 || choice > 11) throw IncorrectInput();
-        cout << endl;
-
-        Complex a, b;
-        switch (choice) {
-        case ADD:
-            cout << "Enter the first number:\n";
-            cin >> a;
-            cout << "Enter the second number:\n";
-            cin >> b;
-            cout << "Result: " << a + b << "\n\n";
-
-            logger += a.get_log();
-            ComplexMenu(logger, err);
-            break;
-
-        case SUB:
-            cout << "Enter the first number:\n";
-            cin >> a;
-            cout << "Enter the second number:\n";
-            cin >> b;
-            cout << "Result: " << a - b << "\n\n";
-
-            logger += a.get_log();
-            ComplexMenu(logger, err);
-            break;
-
-        case MULT:
-            cout << "Enter the first number:\n";
-            cin >> a;
-            cout << "Enter the second number:\n";
-            cin >> b;
-            cout << "Result: " << a * b << "\n\n";
-
-            logger += a.get_log();
-            ComplexMenu(logger, err);
-            break;
-
-        case DIV:
-            cout << "Enter the first number:\n";
-            cin >> a;
-            cout << "Enter the second number:\n";
-            cin >> b;
-            cout << "Result: " << a / b << "\n\n";
-
-            logger += a.get_log();
-            ComplexMenu(logger, err);
-            break;
-
-        case TRIGONOMETRIC_FORM:
-            cout << "Enter the number:\n";
-            cin >> a;
-            cout << "Result: ";
-            a.trigonometric();
+            int choice;
+            choice = getInt();
+            if (choice < 1 || choice > 11) throw IncorrectInput();
             cout << endl;
 
-            logger += a.get_log();
-            ComplexMenu(logger, err);
-            break;
+            Complex a, b;
+            switch (choice) {
+            case ADD:
+                cout << "Enter the first number:\n";
+                cin >> a;
+                cout << "Enter the second number:\n";
+                cin >> b;
+                cout << "Result: " << a + b << "\n\n";
 
-        case INDICATIVE_FORM:
-            cout << "Enter the number:\n";
-            cin >> a;
-            cout << "Result: ";
-            a.indicative();
-            cout << endl;
+                logger += a.get_log();
+                break;
 
-            logger += a.get_log();
-            ComplexMenu(logger, err);
-            break;
+            case SUB:
+                cout << "Enter the first number:\n";
+                cin >> a;
+                cout << "Enter the second number:\n";
+                cin >> b;
+                cout << "Result: " << a - b << "\n\n";
 
-        case EXPONENTIATION:
-            cout << "Enter the number:\n";
-            cin >> a;
-            cout << "Enter the degree: ";
-            int degree;
-            degree = getInt();
-            cout << "Result: ";
-            a.exp(degree);
-            cout << endl;
+                logger += a.get_log();
+                break;
 
-            logger += a.get_log();
-            ComplexMenu(logger, err);
-            break;
+            case MULT:
+                cout << "Enter the first number:\n";
+                cin >> a;
+                cout << "Enter the second number:\n";
+                cin >> b;
+                cout << "Result: " << a * b << "\n\n";
 
-        case SQRT:
-            cout << "Enter the number:\n";
-            cin >> a;
-            cout << "Enter the root degree: ";
-            int root_degree;
-            root_degree = getInt();
-            cout << "Result: ";
-            a.complex_sqrt(root_degree);
-            cout << endl;
+                logger += a.get_log();
+                break;
 
-            logger += a.get_log();
-            ComplexMenu(logger, err);
-            break;
+            case DIV:
+                cout << "Enter the first number:\n";
+                cin >> a;
+                cout << "Enter the second number:\n";
+                cin >> b;
+                cout << "Result: " << a / b << "\n\n";
 
-        case QUADRATIC_EQUATION:
-            cout << "Enter the coefficients of the equation (ax^2+bx+c=0):\n";
-            int a_coef, b_coef, c_coef;
-            cout << "a: ";
-            a_coef = getInt();
-            cout << "b: ";
-            b_coef = getInt();
-            cout << "c: ";
-            c_coef = getInt();
-            cout << "Result: ";
-            a.quadratic_equation(a_coef, b_coef, c_coef);
-            cout << endl;
+                logger += a.get_log();
+                break;
 
-            logger += a.get_log();
-            ComplexMenu(logger, err);
-            break;
+            case TRIGONOMETRIC_FORM:
+                cout << "Enter the number:\n";
+                cin >> a;
+                cout << "Result: ";
+                a.trigonometric();
+                cout << endl;
 
-        case LOG:
-            cout << logger << endl;
-            ComplexMenu(logger, err);
-            break;
+                logger += a.get_log();
+                break;
 
-        case EXIT:
-            break;
+            case INDICATIVE_FORM:
+                cout << "Enter the number:\n";
+                cin >> a;
+                cout << "Result: ";
+                a.indicative();
+                cout << endl;
+
+                logger += a.get_log();
+                break;
+
+            case EXPONENTIATION:
+                cout << "Enter the number:\n";
+                cin >> a;
+                cout << "Enter the degree: ";
+                int degree;
+                degree = getInt();
+                cout << "Result: ";
+                a.exp(degree);
+                cout << endl;
+
+                logger += a.get_log();
+                break;
+
+            case SQRT:
+                cout << "Enter the number:\n";
+                cin >> a;
+                cout << "Enter the root degree: ";
+                int root_degree;
+                root_degree = getInt();
+                cout << "Result: ";
+                a.complex_sqrt(root_degree);
+                cout << endl;
+
+                logger += a.get_log();
+                break;
+
+            case QUADRATIC_EQUATION:
+                cout << "Enter the coefficients of the equation (ax^2+bx+c=0):\n";
+                int a_coef, b_coef, c_coef;
+                cout << "a: ";
+                a_coef = getInt();
+                cout << "b: ";
+                b_coef = getInt();
+                cout << "c: ";
+                c_coef = getInt();
+                cout << "Result: ";
+                a.quadratic_equation(a_coef, b_coef, c_coef);
+                cout << endl;
+
+                logger += a.get_log();
+                break;
+
+            case LOG:
+                cout << logger << endl;
+                break;
+
+            case EXIT:
+                running = false;
+                break;
+            }
         }
-    }
 
-    catch (CriticalIncorrectInput& e) {
-        err.push_back(new CriticalIncorrectInput);
-        e.print();
-        cout << endl;
-        ComplexMenu(logger, err);
-    }
-    catch (IncorrectInput& e) {
-        err.push_back(new IncorrectInput);
-        e.print();
-        cout << endl;
-        ComplexMenu(logger, err);
-    }
-    catch (DivisionByZero& e) {
-        err.push_back(new DivisionByZero);
-        e.print();
-        cout << endl;
-        ComplexMenu(logger, err);
-    }
+        catch (CriticalIncorrectInput& e) {
+            err.push_back(new CriticalIncorrectInput);
+            e.print();
+            cout << endl;
+        }
+        catch (IncorrectInput& e) {
+            err.push_back(new IncorrectInput);
+            e.print();
+            cout << endl;
+        }
+        catch (DivisionByZero& e) {
+            err.push_back(new DivisionByZero);
+            e.print();
+            cout << endl;
+        }
+    }    
 }

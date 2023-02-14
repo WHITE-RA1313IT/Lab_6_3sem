@@ -47,65 +47,60 @@ bool FunnyGame::isWin(vector<int> const& answers) {
 }
 
 void FunnyGameMenu(vector<IError*>& err) {
-    cout << char(9475) << char(9476) << "FUNNY GAME" << char(9477) << char(9478) << endl;
-    cout << "1) Play;\n";
-    cout << "2) Exit to main menu.\n";
-    cout << "Your choice: ";
+    bool running = true;
+    while (running) {
+        try {
+            cout << char(9475) << char(9476) << "FUNNY GAME" << char(9477) << char(9478) << endl;
+            cout << "1) Play;\n";
+            cout << "2) Exit to main menu.\n";
+            cout << "Your choice: ";
 
-    try {
-        int game_choice;
-        game_choice = getInt();
-        if (game_choice < 1 || game_choice > 2) {
-            throw IncorrectInput();
-        }
-        cout << endl;
-
-        if (game_choice == 1) {
-            cout << "Enter the size of the playing field (3-6): ";
-            int field_size;
-            field_size = getInt();
-            if (field_size < 3 || field_size > 6) {
+            int game_choice;
+            game_choice = getInt();
+            if (game_choice < 1 || game_choice > 2) {
                 throw IncorrectInput();
             }
-
-            FunnyGame game1 = FunnyGame(field_size);
-
-            for (auto x : game1.game) {
-                for (auto y : x) {
-                    cout << y << " ";
-                }
-                cout << endl;
-            }
-
-            vector<int> answers;
-            for (int i = 0; i < field_size; i++) {
-                int ans;
-                cout << "Enter number #" << i + 1 << ": ";
-                ans = getInt();
-                if (ans < 1 || ans > pow(field_size, 2)) throw IncorrectInput();
-                for (int j = 0; j < answers.size(); j++) {
-                    if (ans == answers[j]) throw IncorrectInput();
-                }
-                answers.push_back(ans);
-            }
-
             cout << endl;
-            if (game1.isWin(answers)) cout << char(7) << char(9473) << "YOU WIN!" << char(9474) << "\n\n";
-            FunnyGameMenu(err);
-        }
-        else {
-            return;
-        }
-    }
 
-    catch (CriticalIncorrectInput& e) {
-        err.push_back(new CriticalIncorrectInput);
-        e.print();
-        cout << endl;
-    }
-    catch (IncorrectInput& e) {
-        err.push_back(new IncorrectInput);
-        e.print();
-        cout << endl;
+            if (game_choice == 1) {
+                cout << "Enter the size of the playing field (3-6): ";
+                int field_size;
+                field_size = getInt();
+                if (field_size < 3 || field_size > 6) {
+                    throw IncorrectInput();
+                }
+
+                FunnyGame game1 = FunnyGame(field_size);
+
+                vector<int> answers;
+                for (int i = 0; i < field_size; i++) {
+                    int ans;
+                    cout << "Enter number #" << i + 1 << ": ";
+                    ans = getInt();
+                    if (ans < 1 || ans > pow(field_size, 2)) throw IncorrectInput();
+                    for (int j = 0; j < answers.size(); j++) {
+                        if (ans == answers[j]) throw IncorrectInput();
+                    }
+                    answers.push_back(ans);
+                }
+
+                cout << endl;
+                if (game1.isWin(answers)) cout << char(7) << char(9473) << "YOU WIN!" << char(9474) << "\n\n";
+            }
+            else {
+                running = false;
+            }
+        }
+
+        catch (CriticalIncorrectInput& e) {
+            err.push_back(new CriticalIncorrectInput);
+            e.print();
+            cout << endl;
+        }
+        catch (IncorrectInput& e) {
+            err.push_back(new IncorrectInput);
+            e.print();
+            cout << endl;
+        }
     }
 }
